@@ -20,6 +20,7 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
         if GPIO.VERSION < "0.6":       # Need at least 0.6 for edge detection
             raise Exception("RPi.GPIO must be greater than 0.6")
         GPIO.setwarnings(False)        # Disable GPIO warnings
+		self._active_tool = 0
 
     @octoprint.plugin.BlueprintPlugin.route("/filament", methods=["GET"])
     def api_get_filament(self):
@@ -42,6 +43,10 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
     @property
     def runout_tool(self):
         return int(self._settings.get(["runout_tool"]))
+
+    @property
+    def active_tool(self):
+        return int(self._active_tool)
 
     @property
     def jam_pin(self):
@@ -160,9 +165,6 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
     def get_template_configs(self):
         return [dict(type="settings", custom_bindings=False)]
 
-	def current_tool():
-		return 0;
-
     def on_event(self, event, payload):
         # Early abort in case of out ot filament when start printing, as we
         # can't change with a cold nozzle
@@ -217,10 +219,9 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
         sleep(self.runout_bounce/1000)
 
 		# don't do anything if the active tool does not match the jam tool (if set)
-		if ((self.runnout_tool > -1) && (self.current_tool() != self.runout_tool)) {
-            self._logger.info("Runout Sensor incorrect active tool.")
-            return
-		}
+		if ((self.runnout_tool > -1) && (self.current_tool() != self.runout_tool)):
+			self._logger.info("Runout Sensor incorrect active tool.")
+			return
 
         # If we have previously triggered a state change we are still out
         # of filament. Log it and wait on a print resume or a new print job.
@@ -252,10 +253,9 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
         sleep(self.jam_bounce/1000)
 
 		# don't do anything if the active tool does not match the jam tool (if set)
-		if ((self.jam_tool > -1) && (self.current_tool() != self.jam_tool)) {
-            self._logger.info("Jam Sensor incorrect active tool.")
-            return
-		}
+		if ((self.jam_tool > -1) && (self.current_tool() != self.jam_tool))
+			self._logger.info("Jam Sensor incorrect active tool.")
+			return
 
         # If we have previously triggered a state change we are still out
         # of filament. Log it and wait on a print resume or a new print job.
@@ -282,6 +282,15 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
             self._logger.info("Filament not jammed!")
             if not self.jammed_pause_print:
                 self.jam_triggered = 0
+
+
+	## this is the gcode being queued up to send to the printer
+	def process_queueing(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
+##		if cmd.startswith("T"):
+##			newnum = read the tool number
+##			self._active_tool = newnum
+		return
+
 
     def get_update_information(self):
         return dict(
@@ -312,6 +321,7 @@ def __plugin_load__():
     global __plugin_hooks__
     __plugin_hooks__ = {
         "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information
+		"octoprint.comm.protocol.gcode.queuing": __plugin_implementation__.process_queueing,
     }
 
 

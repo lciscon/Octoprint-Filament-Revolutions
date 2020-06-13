@@ -20,7 +20,7 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
         if GPIO.VERSION < "0.6":       # Need at least 0.6 for edge detection
             raise Exception("RPi.GPIO must be greater than 0.6")
         GPIO.setwarnings(False)        # Disable GPIO warnings
-		self._active_tool = 0
+        self._active_tool = 0
 
     @octoprint.plugin.BlueprintPlugin.route("/filament", methods=["GET"])
     def api_get_filament(self):

@@ -219,7 +219,7 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
         sleep(self.runout_bounce/1000)
 
         # don't do anything if the active tool does not match the jam tool (if set)
-        if ((self.runnout_tool > -1) && (self.current_tool() != self.runout_tool)):
+        if (self.current_tool() != self.runout_tool):
             self._logger.info("Runout Sensor incorrect active tool.")
             return
 
@@ -253,7 +253,7 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
         sleep(self.jam_bounce/1000)
 
         # don't do anything if the active tool does not match the jam tool (if set)
-        if ((self.jam_tool > -1) && (self.current_tool() != self.jam_tool))
+        if (self.current_tool() != self.jam_tool):
             self._logger.info("Jam Sensor incorrect active tool.")
             return
 

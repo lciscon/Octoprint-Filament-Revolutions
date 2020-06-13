@@ -218,10 +218,10 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
     def runout_sensor_callback(self, _):
         sleep(self.runout_bounce/1000)
 
-		# don't do anything if the active tool does not match the jam tool (if set)
-		if ((self.runnout_tool > -1) && (self.current_tool() != self.runout_tool)):
-			self._logger.info("Runout Sensor incorrect active tool.")
-			return
+        # don't do anything if the active tool does not match the jam tool (if set)
+        if ((self.runnout_tool > -1) && (self.current_tool() != self.runout_tool)):
+            self._logger.info("Runout Sensor incorrect active tool.")
+            return
 
         # If we have previously triggered a state change we are still out
         # of filament. Log it and wait on a print resume or a new print job.
@@ -252,10 +252,10 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
     def jam_sensor_callback(self, _):
         sleep(self.jam_bounce/1000)
 
-		# don't do anything if the active tool does not match the jam tool (if set)
-		if ((self.jam_tool > -1) && (self.current_tool() != self.jam_tool))
-			self._logger.info("Jam Sensor incorrect active tool.")
-			return
+        # don't do anything if the active tool does not match the jam tool (if set)
+        if ((self.jam_tool > -1) && (self.current_tool() != self.jam_tool))
+            self._logger.info("Jam Sensor incorrect active tool.")
+            return
 
         # If we have previously triggered a state change we are still out
         # of filament. Log it and wait on a print resume or a new print job.

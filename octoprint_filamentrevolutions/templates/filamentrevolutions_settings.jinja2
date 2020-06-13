@@ -16,6 +16,12 @@
             <input type="number" step="any" min="0" class="input-mini text-right" data-bind="value: settings.plugins.filamentrevolutions.runout_pin">
         </div>
     </div>
+	<div class="control-group">
+        <label class="control-label">{{ _('Runout Sensor Tool:') }}</label>
+        <div class="controls" data-toggle="tooltip" title="{{ _('Which tool should be active when testing (-1 means ignore)') }}">
+            <input type="number" step="any" min="-1" class="input-mini text-right" data-bind="value: settings.plugins.filamentrevolutions.runout_tool">
+        </div>
+    </div>
     <div class="control-group">
         <label class="control-label">{{ _('Runout Sensor Debounce Time:') }}</label>
         <div class="controls" data-toggle="tooltip" title="{{ _('When a sensor state change happens, wait for this amount of time to wait for the signal to stabilize.') }}">
@@ -50,6 +56,12 @@
         <label class="control-label">{{ _('Jam Sensor Pin:') }}</label>
         <div class="controls" data-toggle="tooltip" title="{{ _('Which Raspberry Pi GPIO pin your switch is attached to (-1 disables the plugin)') }}">
             <input type="number" step="any" min="0" class="input-mini text-right" data-bind="value: settings.plugins.filamentrevolutions.jam_pin">
+        </div>
+    </div>
+	<div class="control-group">
+        <label class="control-label">{{ _('Jam Sensor Tool:') }}</label>
+        <div class="controls" data-toggle="tooltip" title="{{ _('Which tool should be active when testing (-1 means ignore)') }}">
+            <input type="number" step="any" min="-1" class="input-mini text-right" data-bind="value: settings.plugins.filamentrevolutions.jam_tool">
         </div>
     </div>
     <div class="control-group">

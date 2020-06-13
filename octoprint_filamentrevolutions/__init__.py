@@ -40,8 +40,16 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
         return int(self._settings.get(["runout_pin"]))
 
     @property
+    def runout_tool(self):
+        return int(self._settings.get(["runout_tool"]))
+
+    @property
     def jam_pin(self):
         return int(self._settings.get(["jam_pin"]))
+
+    @property
+    def jam_tool(self):
+        return int(self._settings.get(["jam_tool"]))
 
     @property
     def runout_bounce(self):
@@ -113,12 +121,14 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
     def get_settings_defaults(self):
         return dict(
             runout_pin=-1,   # Default is no pin
+			runout_tool=-1,  #Default is no tool
             runout_bounce=250,  # Debounce 250ms
             runout_switch=0,    # Normally Open
             no_filament_gcode='',
             runout_pause_print=True,
 
             jam_pin=-1,  # Default is no pin
+			jam_tool=-1,  #Default is no tool
             jam_bounce=250,  # Debounce 250ms
             jam_switch=1,  # Normally Closed
             jammed_gcode='',
@@ -149,6 +159,9 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
 
     def get_template_configs(self):
         return [dict(type="settings", custom_bindings=False)]
+
+	def current_tool():
+		return 0;
 
     def on_event(self, event, payload):
         # Early abort in case of out ot filament when start printing, as we
@@ -203,6 +216,12 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
     def runout_sensor_callback(self, _):
         sleep(self.runout_bounce/1000)
 
+		# don't do anything if the active tool does not match the jam tool (if set)
+		if ((self.runnout_tool > -1) && (self.current_tool() != self.runout_tool)) {
+            self._logger.info("Runout Sensor incorrect active tool.")
+            return
+		}
+
         # If we have previously triggered a state change we are still out
         # of filament. Log it and wait on a print resume or a new print job.
         if self.runout_sensor_triggered():
@@ -231,6 +250,12 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
 
     def jam_sensor_callback(self, _):
         sleep(self.jam_bounce/1000)
+
+		# don't do anything if the active tool does not match the jam tool (if set)
+		if ((self.jam_tool > -1) && (self.current_tool() != self.jam_tool)) {
+            self._logger.info("Jam Sensor incorrect active tool.")
+            return
+		}
 
         # If we have previously triggered a state change we are still out
         # of filament. Log it and wait on a print resume or a new print job.

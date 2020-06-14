@@ -284,12 +284,12 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
                 self.jam_triggered = 0
 
 
-	## this is the gcode being queued up to send to the printer
-	def process_queueing(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
+    ## this is the gcode being queued up to send to the printer
+    def process_queueing(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
 ##		if cmd.startswith("T"):
 ##			newnum = read the tool number
 ##			self._active_tool = newnum
-		return
+        return
 
 
     def get_update_information(self):

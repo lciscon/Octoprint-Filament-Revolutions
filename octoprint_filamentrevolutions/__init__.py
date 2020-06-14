@@ -285,7 +285,7 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
 
 
     ## this is the gcode being queued up to send to the printer
-    def process_queueing(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
+    def process_queued(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
         self._logger.info("Processings2: %s" % cmd)
         if cmd.startswith("T"):
             llist = line.split(" ")
@@ -324,7 +324,7 @@ def __plugin_load__():
     global __plugin_hooks__
     __plugin_hooks__ = {
         "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
-        "octoprint.comm.protocol.gcode.queuing": __plugin_implementation__.process_queueing,
+        "octoprint.comm.protocol.gcode.queued": __plugin_implementation__.process_queued,
     }
 
 

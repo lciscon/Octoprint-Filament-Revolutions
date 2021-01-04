@@ -171,6 +171,7 @@ class FilamentSensorsRevolutions(octoprint.plugin.StartupPlugin,
     def on_event(self, event, payload):
         # Early abort in case of out ot filament when start printing, as we
         # can't change with a cold nozzle
+		# LC removed this because it doesn't check for the active tool #
 #        if event is Events.PRINT_STARTED:
 #            if self.runout_sensor_enabled() and self.no_filament():
 #                self._logger.info("Printing aborted: no filament detected!")
